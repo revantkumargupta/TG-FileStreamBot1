@@ -11,8 +11,7 @@ from WebStreamer import utils
 from WebStreamer import StreamBot
 from WebStreamer.server import web_server
 from WebStreamer.bot.clients import initialize_clients
-import uvloop
-uvloop.install()
+
 
 logging.basicConfig(
     level=logging.INFO,
