@@ -1,24 +1,12 @@
 import math
-import asyncio
 import logging
 from WebStreamer import Var
-from typing import Dict, Union
+from typing import Dict
 from WebStreamer.bot import work_loads
-from pyrogram import Client, utils, raw
+from pyrogram import Client
 from .file_properties import get_file_ids
-from pyrogram.session import Session, Auth
-from pyrogram.errors import AuthBytesInvalid
 from WebStreamer.server.exceptions import FIleNotFound
-from pyrogram.file_id import FileId, FileType, ThumbnailSource
-
-
-async def chunk_size(length):
-    return 2 ** max(min(math.ceil(math.log2(length / 1024)), 10), 2) * 1024
-
-
-async def offset_fix(offset, chunksize):
-    offset -= offset % chunksize
-    return offset
+from pyrogram.file_id import FileId
 
 
 class ByteStreamer:
