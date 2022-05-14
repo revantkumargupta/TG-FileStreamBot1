@@ -65,8 +65,8 @@ class ByteStreamer:
                 offset += chunks
             async for chunk in client.get_file(file_id, file_size, limit, offset):
                 yield chunk
-        except (TimeoutError, AttributeError):
-            pass
+        except Exception as e:
+            logging.error(e)
         finally:
             work_loads[index] -= 1
 
