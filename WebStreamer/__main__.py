@@ -47,7 +47,7 @@ async def start_services():
     await initialize_clients()
     print("------------------------------ DONE ------------------------------")
     print()
-    if Var.ON_HEROKU:
+    if Var.ON_HEROKU and Var.PING_INTERVAL > 0:
         print("------------------ Starting Keep Alive Service ------------------")
         print()
         asyncio.create_task(utils.ping_server())
