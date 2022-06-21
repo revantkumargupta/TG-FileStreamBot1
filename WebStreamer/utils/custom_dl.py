@@ -92,7 +92,7 @@ class ByteStreamer:
                     )
 
                     try:
-                        await media_session.send(
+                        await media_session.invoke(
                             raw.functions.auth.ImportAuthorization(
                                 id=exported_auth.id, bytes=exported_auth.bytes
                             )
@@ -192,7 +192,7 @@ class ByteStreamer:
         location = await self.get_location(file_id)
 
         try:
-            r = await media_session.send(
+            r = await media_session.invoke(
                 raw.functions.upload.GetFile(
                     location=location, offset=offset, limit=chunk_size
                 ),
@@ -211,7 +211,7 @@ class ByteStreamer:
                     if 1 < current_part <= part_count:
                         yield chunk
 
-                    r = await media_session.send(
+                    r = await media_session.invoke(
                         raw.functions.upload.GetFile(
                             location=location, offset=offset, limit=chunk_size
                         ),
