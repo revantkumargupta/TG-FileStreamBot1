@@ -7,6 +7,8 @@ import math
 import logging
 import secrets
 import mimetypes
+import shutil
+import psutil
 from aiohttp import web
 from aiohttp.http_exceptions import BadStatusLine
 from WebStreamer.bot import multi_clients, work_loads, class_cache
@@ -32,6 +34,39 @@ async def root_route_handler(_):
             "version": __version__,
         }
     )
+
+@routes.get("/status", allow_head=True)
+async def status_handler(request: web.Request):
+    uptime = utils.get_readable_time((time.time() - StartTime))
+    total, used, free = shutil.disk_usage('.')
+
+    total = utils.human_size(total)
+    used = utils.human_size(used)
+    free = utils.human_size(free)
+
+    sent = utils.human_size(psutil.net_io_counters().bytes_sent)
+    recv = utils.human_size(psutil.net_io_counters().bytes_recv)
+
+    cpuUsage = psutil.cpu_percent(interval=0.5)
+    memory = psutil.virtual_memory().percent
+    disk = psutil.disk_usage('/').percent
+
+    html_resp = f"""<html><head><title>Status</title></head>
+<body>
+    <table border="1">
+        <tr><td>Bot Uptime </td><td>{uptime} </td></tr>
+        <tr><td>Total Disk Space </td><td>{total} </td></tr>
+        <tr><td>Used Disk Space </td><td>{used} </td></tr>
+        <tr><td>Free Disk Space </td><td>{free} </td></tr>
+        <tr><td>Data Sent </td><td>{sent} </td></tr>
+        <tr><td>Data Received </td><td>{recv} </td></tr>
+        <tr><td>CPU </td><td>{cpuUsage}% </td></tr>
+        <tr><td>RAM </td><td>{memory}% </td></tr>
+        <tr><td>Disk </td><td>{disk}% </td></tr>
+    </table>
+</body>
+</html>"""
+    return web.Response(text=html_resp, content_type='text/html')
 
 @routes.get(r"/{path:\S+}", allow_head=True)
 async def stream_handler(request: web.Request):
