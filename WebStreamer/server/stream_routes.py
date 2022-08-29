@@ -40,12 +40,12 @@ async def status_handler(request: web.Request):
     uptime = utils.get_readable_time((time.time() - StartTime))
     total, used, free = shutil.disk_usage('.')
 
-    total = utils.human_size(total)
-    used = utils.human_size(used)
-    free = utils.human_size(free)
+    total = utils.humanbytes(total)
+    used = utils.humanbytes(used)
+    free = utils.humanbytes(free)
 
-    sent = utils.human_size(psutil.net_io_counters().bytes_sent)
-    recv = utils.human_size(psutil.net_io_counters().bytes_recv)
+    sent = utils.humanbytes(psutil.net_io_counters().bytes_sent)
+    recv = utils.humanbytes(psutil.net_io_counters().bytes_recv)
 
     cpuUsage = psutil.cpu_percent(interval=0.5)
     memory = psutil.virtual_memory().percent
