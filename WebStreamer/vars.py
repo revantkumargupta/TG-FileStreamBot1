@@ -41,6 +41,11 @@ class Var(object):
         )
 
     UPDATES_CHANNEL = str(environ.get('UPDATES_CHANNEL', "aredirect"))
+
+    FORCE_UPDATES_CHANNEL = environ.get("FORCE_UPDATES_CHANNEL", False)
+    FORCE_UPDATES_CHANNEL = True if str(FORCE_UPDATES_CHANNEL).lower() == "true" else False
+
+
     OWNER_ID = int(environ.get('OWNER_ID', '777000'))
 
     BANNED_CHANNELS = list(set(int(x) for x in str(environ.get("BANNED_CHANNELS", "-1001296894100")).split()))

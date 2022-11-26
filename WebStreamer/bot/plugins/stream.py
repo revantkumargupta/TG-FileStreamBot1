@@ -3,6 +3,7 @@
 import asyncio
 from WebStreamer.bot import StreamBot
 from WebStreamer.utils.file_properties import gen_link
+from WebStreamer.utils.util import force_sub
 from WebStreamer.vars import Var
 from pyrogram import filters, Client
 from pyrogram.errors import FloodWait
@@ -24,6 +25,9 @@ from pyrogram.enums.parse_mode import ParseMode
     group=4,
 )
 async def private_receive_handler(c: Client, m: Message):
+    user_status = await force_sub(c, m)
+    if not user_status:
+        return
     try:
         log_msg = await m.forward(chat_id=Var.BIN_CHANNEL)
         reply_markup, Stream_Text, stream_link = await gen_link(m=m, log_msg=log_msg, from_channel=False)
